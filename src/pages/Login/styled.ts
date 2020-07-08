@@ -2,6 +2,7 @@ import styled from 'styled-components/native'
 import { Platform } from 'react-native'
 
 export const LoginWrapper = styled.View`
+  width: 100%;
   flex: 1;
   align-items: center;
   justify-content: center;
