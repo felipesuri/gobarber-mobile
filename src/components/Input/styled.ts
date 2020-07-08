@@ -3,6 +3,7 @@ import FatherIcon from 'react-native-vector-icons/Feather'
 
 interface InputProps {
   isFocused: boolean
+  isErrored: boolean
 }
 
 export const InputWrapper = styled.View<InputProps>`
@@ -14,6 +15,12 @@ export const InputWrapper = styled.View<InputProps>`
   margin-bottom: 8px;
   border-width: 2px;
   border-color: #232129;
+
+  ${props =>
+    props.isErrored &&
+    css`
+      border-color: #c53030;
+    `}
 
   ${props =>
     props.isFocused &&
