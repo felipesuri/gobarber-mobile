@@ -5,7 +5,7 @@ import {
   Platform,
   ScrollView,
   TextInput,
-  Alert
+  Alert,
 } from 'react-native'
 import Icon from 'react-native-vector-icons/Feather'
 import { useNavigation } from '@react-navigation/native'
@@ -20,6 +20,8 @@ import Button from '../../components/Button'
 import logoImg from '../../assets/logo.png'
 
 import * as S from './styled'
+
+import api from '../../services/api'
 
 import getValidationErrors from '../../utils/getValidationErrors'
 
@@ -42,15 +44,22 @@ const SingUp: React.FC = () => {
 
       const schema = Yup.object().shape({
         name: Yup.string().required('Nome obrigatório'),
-        email: Yup.string().required('E-mail obrigatório').email('Digite um e-mail válido'),
-        password: Yup.string().min(8, 'Tamanho mínimo: 8 digítos')
+        email: Yup.string()
+          .required('E-mail obrigatório')
+          .email('Digite um e-mail válido'),
+        password: Yup.string().min(8, 'Tamanho mínimo: 8 digítos'),
       })
 
       await schema.validate(data, { abortEarly: false })
 
-      // await api.post('/users', data)
+      await api.post('/users', data)
 
-      // history.push('/')
+      Alert.alert(
+        'Cadastro relizado com sucesso',
+        'Você já pode fazer login na aplicação'
+      )
+
+      navigation.goBack()
     } catch (err) {
       if (err instanceof Yup.ValidationError) {
         const errors = getValidationErrors(err)
@@ -60,7 +69,10 @@ const SingUp: React.FC = () => {
         return
       }
 
-      Alert.alert('Erro no cadastro', 'Ocorreu um erro ao fazer cadastro, tente novamente')
+      Alert.alert(
+        'Erro no cadastro',
+        'Ocorreu um erro ao fazer cadastro, tente novamente'
+      )
     }
   }, [])
 
@@ -80,11 +92,7 @@ const SingUp: React.FC = () => {
 
             <S.Title>Crie sua conta</S.Title>
 
-            <Form
-              ref={formRef}
-              style={{ width: '100%' }}
-              onSubmit={handleSignUp}
-            >
+            <Form ref={formRef} style={{ width: '100%' }} onSubmit={handleSignUp}>
               <Input
                 name="name"
                 icon="user"
@@ -122,7 +130,7 @@ const SingUp: React.FC = () => {
                 onSubmitEditing={() => formRef.current?.submitForm()}
               />
 
-              <Button onPress={() => formRef.current?.submitForm()}>Entrar</Button>
+              <Button onPress={() => formRef.current?.submitForm()}>Cadastrar</Button>
             </Form>
           </S.SignUpWrapper>
         </ScrollView>
