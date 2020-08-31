@@ -16,7 +16,7 @@ export interface Provider {
 const Dashboard: React.FC = () => {
   const [providers, setProviders] = useState<Provider[]>([])
 
-  const { user } = useAuth()
+  const { user, signOut } = useAuth()
   const { navigate } = useNavigation()
 
   useEffect(() => {
@@ -28,14 +28,15 @@ const Dashboard: React.FC = () => {
   }
 
   function handleNavigateToProfile() {
-    navigate('Profile')
+    // navigate('Profile')
+    signOut()
   }
 
   return (
     <S.DashboardWrapper>
       <S.Header>
         <S.HeaderTitle>
-          Bem,vindo {'\n'}
+          Bem-vindo{'\n'}
           <S.UserName>{user.name}</S.UserName>
         </S.HeaderTitle>
 

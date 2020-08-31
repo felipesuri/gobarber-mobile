@@ -1,4 +1,5 @@
 import styled from 'styled-components/native'
+import { getStatusBarHeight } from 'react-native-iphone-x-helper'
 
 import { Provider } from './index'
 import { FlatList } from 'react-native'
@@ -10,6 +11,7 @@ export const DashboardWrapper = styled.View`
 
 export const Header = styled.View`
   padding: 24px;
+  padding-top: ${getStatusBarHeight() + 24}px;
   background: #28262e;
 
   flex-direction: row;
