@@ -11,11 +11,11 @@ import { TextInputProps } from 'react-native'
 import { useField } from '@unform/core'
 
 import * as S from './styled'
-import { TabRouter } from '@react-navigation/native'
 
 interface InputProps extends TextInputProps {
   name: string
   icon: string
+  containerStyle?: {}
 }
 
 interface InputValueReference {
@@ -27,7 +27,7 @@ interface InputRef {
 }
 
 const Input: React.RefForwardingComponent<InputRef, InputProps> = (
-  { name, icon, ...rest },
+  { name, icon, containerStyle = {}, ...rest },
   ref
 ) => {
   const inputElementRef = useRef<any>(null)
@@ -71,7 +71,7 @@ const Input: React.RefForwardingComponent<InputRef, InputProps> = (
   }, [fieldName, registerField])
 
   return (
-    <S.InputWrapper isFocused={isFocused} isErrored={!!error}>
+    <S.InputWrapper style={containerStyle} isFocused={isFocused} isErrored={!!error}>
       <S.Icon
         name={icon}
         size={20}
