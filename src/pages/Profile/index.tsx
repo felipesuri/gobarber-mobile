@@ -9,6 +9,7 @@ import {
 import { useNavigation } from '@react-navigation/native'
 import Icon from 'react-native-vector-icons/Feather'
 import * as Yup from 'yup'
+import ImagePicker from 'react-native-image-picker'
 
 import { Form } from '@unform/mobile'
 import { FormHandles } from '@unform/core'
@@ -34,7 +35,7 @@ const Profile: React.FC = () => {
   const formRef = useRef<FormHandles>(null)
   const navigation = useNavigation()
 
-  const { user, updateUser } = useAuth()
+  const { user, updateUser, signOut } = useAuth()
 
   const emailInputRef = useRef<TextInput>(null)
   const oldPasswordInputRef = useRef<TextInput>(null)
@@ -113,6 +114,39 @@ const Profile: React.FC = () => {
     navigation.goBack()
   }
 
+  const handleUpdateAvatar = useCallback(() => {
+    ImagePicker.showImagePicker(
+      {
+        title: 'Seleciona um avatar',
+        cancelButtonTitle: 'Cancelar',
+        takePhotoButtonTitle: 'Usar câmera',
+        chooseFromLibraryButtonTitle: 'Escolher da galera',
+      },
+      response => {
+        if (response.didCancel) {
+          return
+        }
+
+        if (response.error) {
+          Alert.alert('Erro ao atualizar seu avatar.')
+          return
+        }
+
+        const data = new FormData()
+
+        data.append('avatar', {
+          type: 'image/jpeg',
+          name: `${user.id}.jpg`,
+          uri: response.uri,
+        })
+
+        api.patch('/users/avatar', data).then(apiResponse => {
+          updateUser(apiResponse.data)
+        })
+      }
+    )
+  }, [updateUser, user.id])
+
   return (
     <>
       <KeyboardAvoidingView
@@ -122,11 +156,17 @@ const Profile: React.FC = () => {
       >
         <ScrollView keyboardShouldPersistTaps="handled">
           <S.SignUpWrapper>
-            <S.BackButton onPress={handleNavigateGoBack}>
-              <Icon name="chevron-left" size={24} color="#999591" />
-            </S.BackButton>
+            <S.ButtonsWrapper>
+              <S.Button onPress={handleNavigateGoBack}>
+                <Icon name="chevron-left" size={24} color="#999591" />
+              </S.Button>
 
-            <S.UserAvatarButton>
+              <S.Button onPress={signOut}>
+                <Icon name="power" size={24} color="#999591" />
+              </S.Button>
+            </S.ButtonsWrapper>
+
+            <S.UserAvatarButton onPress={handleUpdateAvatar}>
               <S.UserAvatar source={{ uri: user.avatar_url }} />
             </S.UserAvatarButton>
 

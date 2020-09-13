@@ -16,7 +16,12 @@ export const Title = styled.Text`
   text-align: left;
 `
 
-export const BackButton = styled.TouchableOpacity`
+export const ButtonsWrapper = styled.View`
+  justify-content: space-between;
+  flex-direction: row;
+`
+
+export const Button = styled.TouchableOpacity`
   margin-top: 48px;
 `
 
